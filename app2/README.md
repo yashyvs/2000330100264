@@ -52,4 +52,4 @@ Please note that storing sensitive data like the client secret on the client-sid
 ## Custom Sorting Logic
 The app implements a custom sorting logic to sort the train data. By default, the data is sorted based on the price of the sleeper class in ascending order. The sorting logic can be adjusted as needed by modifying the customSort function in the TrainDataComponent.
 
-![image](./src/Assets/image.png)
+![image](./src/Assets/screenshot.png)
