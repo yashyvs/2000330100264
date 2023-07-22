@@ -78,37 +78,39 @@ const TrainDataComponent = () => {
   const sortedData = [...data].sort(customSort);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold mb-4">All Trains Schedule</h2>
+    <div className="container mx-auto px-4 py-8 bg-purple-500">
+      <h2 className="text-3xl font-bold mb-4 text-white dark:text-blue-400">
+        All Trains Schedule
+      </h2>
       <ul className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {sortedData.map((train, index) => (
           <li
             key={index}
-            className="bg-white shadow-md rounded-lg p-4 text-gray-800"
+            className="bg-purple-100 dark:bg-gray-700 shadow-md rounded-lg p-4 text-gray-800 dark:text-gray-200"
           >
-            <h3 className="text-xl font-semibold mb-2 text-indigo-600">
+            <h3 className="text-xl font-semibold mb-2 text-blue-600 dark:text-blue-300">
               {train.trainName}
             </h3>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               Train Number: {train.trainNumber}
             </p>
-            <p className="text-sm text-green-600">
+            <p className="text-sm text-green-600 dark:text-green-300">
               Departure Time: {train.departureTime.Hours}:
               {train.departureTime.Minutes}
             </p>
-            <p className="text-sm text-blue-600">
+            <p className="text-sm text-yellow-600 dark:text-yellow-300">
               Sleeper Seats Available: {train.seatsAvailable.sleeper}
             </p>
-            <p className="text-sm text-red-600">
+            <p className="text-sm text-red-600 dark:text-red-300">
               AC Seats Available: {train.seatsAvailable.AC}
             </p>
-            <p className="text-sm text-yellow-600">
+            <p className="text-sm text-indigo-600 dark:text-indigo-300">
               Sleeper Price: {train.price.sleeper}
             </p>
-            <p className="text-sm text-purple-600">
+            <p className="text-sm text-purple-600 dark:text-purple-300">
               AC Price: {train.price.AC}
             </p>
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-gray-700 dark:text-gray-400">
               Delayed By: {train.delayedBy} minutes
             </p>
           </li>
