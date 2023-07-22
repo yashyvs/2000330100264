@@ -1,21 +1,23 @@
-const express = require('express');
-const axios = require('axios');
-const async = require('async');
+const express = require("express");
+const axios = require("axios");
+const async = require("async");
 
 const app = express();
 const port = 8008;
 
-app.get('/numbers', async (req, res) => {
+app.get("/numbers", async (req, res) => {
   const urls = req.query.url;
 
   if (!urls || !Array.isArray(urls)) {
-    return res.status(400).json({ error: 'Invalid or missing "url" parameter.' });
+    return res
+      .status(400)
+      .json({ error: 'Invalid or missing "url" parameter.' });
   }
 
   const validUrls = urls.filter((url) => isValidUrl(url));
 
   if (validUrls.length === 0) {
-    return res.status(400).json({ error: 'No valid URLs provided.' });
+    return res.status(400).json({ error: "No valid URLs provided." });
   }
 
   try {
@@ -23,7 +25,8 @@ app.get('/numbers', async (req, res) => {
     const mergedNumbers = mergeAndSortNumbers(numbersArray);
     return res.json({ numbers: mergedNumbers });
   } catch (error) {
-    return res.status(500).json({ error: 'Error processing the request.' });
+    console.error("Error processing the request:", error);
+    return res.status(500).json({ error: "Error processing the request." });
   }
 });
 
@@ -34,7 +37,8 @@ function isValidUrl(url) {
 
 async function fetchNumbersFromUrls(urls) {
   const promises = urls.map((url) => {
-    return axios.get(url)
+    return axios
+      .get(url)
       .then((response) => response.data.numbers)
       .catch(() => []); // Ignore errors and return an empty array for invalid URLs or timeouts
   });
@@ -55,5 +59,7 @@ function mergeAndSortNumbers(numbersArray) {
 }
 
 app.listen(port, () => {
-  console.log(`Number Management Service listening at http://localhost:${port}`);
+  console.log(
+    `Number Management Service listening at http://localhost:${port}`
+  );
 });
