@@ -28,7 +28,7 @@ git clone https://github.com/yashyvs/2000330100264.git
 ```
 2. Change into the project directory:
 ```bash
-cd train-schedule-app
+cd app2
 ```
 3. Install the dependencies using npm or yarn:
 ```bash
