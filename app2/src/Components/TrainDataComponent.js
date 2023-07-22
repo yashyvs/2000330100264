@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "tailwindcss/tailwind.css";
+
 
 const TrainDataComponent = () => {
   const apiUrl = "http://20.244.56.144:80/train/trains";
@@ -84,21 +86,31 @@ const TrainDataComponent = () => {
             key={index}
             className="bg-white shadow-md rounded-lg p-4 text-gray-800"
           >
-            <h3 className="text-xl font-semibold mb-2">{train.trainName}</h3>
-            <p className="text-sm">Train Number: {train.trainNumber}</p>
-            <p className="text-sm">
+            <h3 className="text-xl font-semibold mb-2 text-indigo-600">
+              {train.trainName}
+            </h3>
+            <p className="text-sm text-gray-600">
+              Train Number: {train.trainNumber}
+            </p>
+            <p className="text-sm text-green-600">
               Departure Time: {train.departureTime.Hours}:
               {train.departureTime.Minutes}
             </p>
-            <p className="text-sm">
+            <p className="text-sm text-blue-600">
               Sleeper Seats Available: {train.seatsAvailable.sleeper}
             </p>
-            <p className="text-sm">
+            <p className="text-sm text-red-600">
               AC Seats Available: {train.seatsAvailable.AC}
             </p>
-            <p className="text-sm">Sleeper Price: {train.price.sleeper}</p>
-            <p className="text-sm">AC Price: {train.price.AC}</p>
-            <p className="text-sm">Delayed By: {train.delayedBy} minutes</p>
+            <p className="text-sm text-yellow-600">
+              Sleeper Price: {train.price.sleeper}
+            </p>
+            <p className="text-sm text-purple-600">
+              AC Price: {train.price.AC}
+            </p>
+            <p className="text-sm text-gray-700">
+              Delayed By: {train.delayedBy} minutes
+            </p>
           </li>
         ))}
       </ul>
