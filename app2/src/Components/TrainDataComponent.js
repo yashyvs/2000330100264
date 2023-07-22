@@ -2,50 +2,44 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const TrainDataComponent = () => {
-const login = async () => {
-  const result = await axios.post("http://20.244.56.144/train/auth", {
-  "companyName": "Train",
-  "clientID": "4482aacb-b053-450f-ae5e-f27993578d55",
-  "clientSecret": "WeqXXYMdxTRsqOTD",
-  "ownerName": "Yash",
-  "ownerEmail": "2000330100264@rkgit.edu.in",
-  "rollNo": "264"
-});
-
-  console.log(result.data.access_token);
-
-  localStorage.setItem("token", result.data.access_token);
-};
-
-useEffect(() => {
-  login();
-}, []);
-const apiUrl = "http://20.244.56.144:80/train/trains";
-const accessToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTAwMDgyNDYsImNvbXBhbnlOYW1lIjoiVHJhaW4iLCJjbGllbnRJRCI6IjQ0ODJhYWNiLWIwNTMtNDUwZi1hZTVlLWYyNzk5MzU3OGQ1NSIsIm93bmVyTmFtZSI6IiIsIm93bmVyRW1haWwiOiIiLCJyb2xsTm8iOiIyNjQifQ.srnYTvgDkAbTws-4nb4xTna5R_drt9Un6y4vAmq2B-k";
+  const apiUrl = "http://20.244.56.144:80/train/trains";
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
-
-    axios
-      .get(apiUrl, config)
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((error) => {
-        setError(error.message || "An error occurred while fetching data.");
+  const login = async () => {
+    try {
+      const result = await axios.post("http://20.244.56.144/train/auth", {
+        companyName: "Train",
+        clientID: "4482aacb-b053-450f-ae5e-f27993578d55",
+        clientSecret: "WeqXXYMdxTRsqOTD",
+        ownerName: "Yash",
+        ownerEmail: "2000330100264@rkgit.edu.in",
+        rollNo: "264",
       });
-  }, []);
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+      localStorage.setItem("token", result.data.access_token);
+    } catch (error) {
+      console.error("Error during login:", error.message);
+      setError(error.message || "An error occurred during login.");
+    }
+  };
+
+  const fetchTrains = async () => {
+    const token = "Bearer " + localStorage.getItem("token");
+
+    try {
+      const result = await axios.get(apiUrl, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log("Fetched data:", result.data);
+
+      setData(result.data);
+    } catch (error) {
+      setError(error.message || "An error occurred while fetching data.");
+    }
+  };
 
   const customSort = (a, b) => {
     if (a.price.sleeper !== b.price.sleeper) {
@@ -66,28 +60,45 @@ const accessToken =
         b.departureTime.Minutes * 60000 +
         b.delayedBy * 60000
     );
+
     return bDepartureTime - aDepartureTime;
   };
-  const trainsArray = Object.values(data);
-  console.log(data);
-  trainsArray.sort(customSort);
+
+  useEffect(() => {
+    login();
+      fetchTrains();
+  }, []);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  const sortedData = [...data].sort(customSort);
+
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">All Trains Schedule</h2>
-      <ul>
-        {data.map((train, index) => (
-          <li key={index} className="my-4 border p-4">
-            <h3 className="text-lg font-semibold">{train.trainName}</h3>
-            <p>Train Number: {train.trainNumber}</p>
-            <p>
+    <div className="container mx-auto px-4 py-8">
+      <h2 className="text-3xl font-bold mb-4">All Trains Schedule</h2>
+      <ul className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {sortedData.map((train, index) => (
+          <li
+            key={index}
+            className="bg-white shadow-md rounded-lg p-4 text-gray-800"
+          >
+            <h3 className="text-xl font-semibold mb-2">{train.trainName}</h3>
+            <p className="text-sm">Train Number: {train.trainNumber}</p>
+            <p className="text-sm">
               Departure Time: {train.departureTime.Hours}:
               {train.departureTime.Minutes}
             </p>
-            <p>Sleeper Seats Available: {train.seatsAvailable.sleeper}</p>
-            <p>AC Seats Available: {train.seatsAvailable.AC}</p>
-            <p>Sleeper Price: {train.price.sleeper}</p>
-            <p>AC Price: {train.price.AC}</p>
-            <p>Delayed By: {train.delayedBy} minutes</p>
+            <p className="text-sm">
+              Sleeper Seats Available: {train.seatsAvailable.sleeper}
+            </p>
+            <p className="text-sm">
+              AC Seats Available: {train.seatsAvailable.AC}
+            </p>
+            <p className="text-sm">Sleeper Price: {train.price.sleeper}</p>
+            <p className="text-sm">AC Price: {train.price.AC}</p>
+            <p className="text-sm">Delayed By: {train.delayedBy} minutes</p>
           </li>
         ))}
       </ul>
